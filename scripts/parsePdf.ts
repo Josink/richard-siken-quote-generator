@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 import "@ungap/with-resolvers";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
-import {TextItem, TextStyle} from "pdfjs-dist/types/src/display/api";
+import {TextItem} from "pdfjs-dist/types/src/display/api";
+import {insertQuote} from "@/quotes";
+import {db} from "@/db";
 
 type Quote = {
     text: string;
@@ -18,52 +20,40 @@ async function getSentences() {
         const data = new Uint8Array(fs.readFileSync(filepath));
         const pdf = await pdfjsLib.getDocument({data}).promise;
 
+        let fullText = "";
+
         for (let j = 1; j <= pdf.numPages; j++) {
             const page = await pdf.getPage(j);
+
             const content = await page.getTextContent();
-
             const items = content.items as TextItem[];
-            const styles = content.styles;
 
-            const strings = items.map(item => item.str);
+            const pageText = items
+                .map(item => item.str.trim())
+                .join(" ");
 
-            const boldItems = items.filter( item => isBold(item, styles))
-
-            const title = boldItems
-                .map(item => item.str)
-                .join(" ")
-                .replace(/\s+/g, " ")
-                .trim();
-
-            const text = strings
-                .slice(1)
-                .join(" ")
-                .replace(/\s+/g, " ")
-                .trim();
-
-            quotes.push({
-                title,
-                text,
-                book: "Crush"
-            });
+            fullText += pageText + "\n";
         }
+
+        const text = fullText
+            .replace(/\s+/g, " ")
+            .split(".")
+            .map(t => t.trim())
+            .filter(Boolean);
+        const title = text[0];
+
+        db.transaction(()=>{
+            for (let k = 1; k < text.length; k++) {
+                insertQuote(text[k], title, "Crush");
+            }
+        })();
     }
 
 }
 
-function isBold(item: TextItem, styles: Record<string, TextStyle>) {
-    const style = styles[item.fontName];
-
-    const fontFamily = style?.fontFamily?.toLowerCase() || "";
-    const fontName = item.fontName.toLowerCase();
-
-    return (
-        fontFamily.includes("bold") ||
-        fontName.includes("bold")
-    )
-}
-
 (async () => {
     await getSentences();
-    console.log(quotes);
+
+    const count = db.prepare("SELECT COUNT(*) as count FROM quotes").get();
+    console.log(count);
 })();
