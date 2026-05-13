@@ -1,37 +1,69 @@
 import * as fs from 'fs';
 import "@ungap/with-resolvers";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
-import {TextItem} from "pdfjs-dist/types/src/display/api";
+import {TextItem, TextStyle} from "pdfjs-dist/types/src/display/api";
+
+type Quote = {
+    text: string;
+    title: string;
+    book: string;
+}
+
+const quotes: Quote[] = [];
 
 async function getSentences() {
-    const filepath: string = "scripts/Crush Richard Siken.pdf";
-    const data = new Uint8Array(fs.readFileSync(filepath));
 
-    const pdf = await pdfjsLib.getDocument({data}).promise;
+    for (let i = 1; i <= 21; i++){
+        const filepath: string = `scripts/Crush/Crush (${i}).pdf` ;
+        const data = new Uint8Array(fs.readFileSync(filepath));
+        const pdf = await pdfjsLib.getDocument({data}).promise;
 
-    let fullText: string = "";
+        for (let j = 1; j <= pdf.numPages; j++) {
+            const page = await pdf.getPage(j);
+            const content = await page.getTextContent();
 
-    for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
+            const items = content.items as TextItem[];
+            const styles = content.styles;
 
-        const line = content.items.map((item) => (item as TextItem).str)
-            .join("");
+            const strings = items.map(item => item.str);
 
-        fullText += line + "\n";
+            const boldItems = items.filter( item => isBold(item, styles))
+
+            const title = boldItems
+                .map(item => item.str)
+                .join(" ")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            const text = strings
+                .slice(1)
+                .join(" ")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            quotes.push({
+                title,
+                text,
+                book: "Crush"
+            });
+        }
     }
-
-    return fullText;
 
 }
 
+function isBold(item: TextItem, styles: Record<string, TextStyle>) {
+    const style = styles[item.fontName];
+
+    const fontFamily = style?.fontFamily?.toLowerCase() || "";
+    const fontName = item.fontName.toLowerCase();
+
+    return (
+        fontFamily.includes("bold") ||
+        fontName.includes("bold")
+    )
+}
+
 (async () => {
-    const text = await getSentences();
-
-    const lines = text
-        .split("\n")
-        .map(line => line.trim())
-        .filter(Boolean);
-
-    console.log(lines);
+    await getSentences();
+    console.log(quotes);
 })();
