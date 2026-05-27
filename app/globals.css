@@ -6,6 +6,12 @@
   --color-primaryHover: #0b3a40;
   --color-secondary : #71153B;
   --color-secondaryHover : #450d21;
+
+  --color-darkBackground : #000000;
+  --color-darkPrimary: #0b3a40;
+  --color-darkPrimaryHover: #156971;
+  --color-darkSecondary : #450d21;
+  --color-darkSecondaryHover : #71153B;
 }
 
 @layer base {
