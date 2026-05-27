@@ -2,12 +2,18 @@ import * as fs from 'fs';
 import "@ungap/with-resolvers";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import {TextItem} from "pdfjs-dist/types/src/display/api";
-import {insertQuote} from "@/quotes";
-import {db} from "@/db";
+import path from "path";
+
+type Quote = {
+    text: string;
+    title: string;
+    book: string;
+};
 
 async function getSentences() {
 
-    db.prepare("DELETE FROM quotes").run();
+    const quotes: Quote[] = [];
+
     for (let i = 1; i <= 21; i++){
         const filepath: string = `./public/Crush/Crush (${i}).pdf` ;
         const data = new Uint8Array(fs.readFileSync(filepath));
@@ -33,13 +39,16 @@ async function getSentences() {
             .split(".")
             .map(t => t.trim())
             .filter(Boolean);
-        const title = text[0];
 
-        db.transaction(()=>{
-            for (let k = 1; k < text.length; k++) {
-                insertQuote(text[k], title, "Crush");
-            }
-        })();
+        const title = text[0];
+        
+        for (let k = 1; k < text.length; k++) {
+            quotes.push({
+                text: text[k],
+                title,
+                book: "Crush"
+            });
+        }
     }
 
     for (let i = 1; i <= 28; i++){
@@ -69,18 +78,31 @@ async function getSentences() {
             .filter(Boolean);
         const title = text[0];
 
-        db.transaction(()=>{
-            for (let k = 1; k < text.length; k++) {
-                insertQuote(text[k], title, "War of the Foxes");
-            }
-        })();
+        for (let k = 1; k < text.length; k++) {
+            quotes.push({
+                text: text[k],
+                title,
+                book: "War of the Foxes"
+            });
+        }
     }
+
+    const outputPath = path.join(
+        process.cwd(),
+        "data",
+        "quotes.json"
+    );
+
+    fs.writeFileSync(
+        outputPath,
+        JSON.stringify(quotes, null, 2),
+        "utf8"
+    );
+
+    console.log(`Saved ${quotes.length} quotes`);
 
 }
 
 (async () => {
     await getSentences();
-
-    const count = db.prepare("SELECT COUNT(*) as count FROM quotes").get();
-    console.log(count);
 })();

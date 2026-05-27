@@ -1,14 +1,13 @@
-import "@/db";
 import HomePage from "@/components/HomePage";
-import {getRandomQuote} from "@/quotes"
-
+import {getRandomQuote} from "@/scripts/getRandomQuote";
 
 export default function Home() {
-    const quote = getRandomQuote();
+
+    const initialQuote = getRandomQuote();
 
     return (
-      <main>
-          <HomePage initialQuote={quote}/>
-      </main>
-  );
+        <main>
+            <HomePage initialQuote={initialQuote} />
+        </main>
+    );
 }

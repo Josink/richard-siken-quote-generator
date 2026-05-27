@@ -4,6 +4,8 @@ import Image from "next/image";
 import {JSX, useState} from "react"
 import {Playfair_Display_SC} from 'next/font/google'
 
+import quotes from "@/data/quotes.json";
+
 const playfair = Playfair_Display_SC({
     subsets: ['latin'],
     weight: ['400', '700', '900'],
@@ -23,11 +25,11 @@ type HomePageProps = {
 export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
     const [quote, setQuote] = useState(initialQuote);
 
-    async function generateQuote() {
-        const response = await fetch('/api/quote')
-        const data = await response.json()
+    function generateQuote() {
+        const randomQuote =
+            quotes[Math.floor(Math.random() * quotes.length)];
 
-        setQuote(data);
+        setQuote(randomQuote);
     }
 
     return (
