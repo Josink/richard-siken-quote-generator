@@ -6,6 +6,8 @@ import {Playfair_Display_SC} from 'next/font/google'
 
 import quotes from "@/data/quotes.json";
 
+import {copyQuote, shareToTumblr, shareToTwitter, getFullQuote} from "@/scripts/share"
+
 const playfair = Playfair_Display_SC({
     subsets: ['latin'],
     weight: ['400', '700', '900'],
@@ -30,6 +32,21 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
             quotes[Math.floor(Math.random() * quotes.length)];
 
         setQuote(randomQuote);
+    }
+
+    const fullQuote = getFullQuote(
+        quote.text,
+        quote.title,
+        quote.book
+    )
+
+    async function handleCopy(){
+        try{
+            await copyQuote(fullQuote);
+            alert("Copied to clipboard!");
+        } catch(err){
+            console.error("Failed to copy quote to clipboard",err);
+        }
     }
 
     return (
@@ -86,6 +103,12 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
                         — {quote.title}, {quote.book}
                     </p>
 
+                </div>
+
+                <div className = "sharing">
+                    <button className = "share-button" onClick={handleCopy}>Copy Quote</button>
+                    <button className = "share-button" onClick={()=> shareToTwitter(fullQuote)}>Share to Twitter</button>
+                    <button className = "share-button" onClick={()=> shareToTumblr(quote.text, quote.title, quote.book)}>Share to Tumblr</button>
                 </div>
 
 

@@ -3,15 +3,9 @@
 @theme {
   --color-background: #ffffff;
   --color-primary: #156971;
-  --color-primaryHover: #0b3a40;
+  --color-primary-hover: #0b3a40;
   --color-secondary : #71153B;
-  --color-secondaryHover : #450d21;
-
-  --color-darkBackground : #000000;
-  --color-darkPrimary: #0b3a40;
-  --color-darkPrimaryHover: #156971;
-  --color-darkSecondary : #450d21;
-  --color-darkSecondaryHover : #71153B;
+  --color-secondary-hover : #450d21;
 }
 
 @layer base {
@@ -38,7 +32,11 @@
   }
 
   .links{
-    @apply flex flex-row w-1/2 justify-around hover:text-primaryHover text-xl;
+    @apply flex flex-row w-1/2 justify-around text-xl;
+  }
+
+  .links a{
+    @apply hover:text-primary-hover transition-colors;
   }
 
   .description{
@@ -54,10 +52,18 @@
   }
 
   .quote-button {
-    @apply bg-secondary w-fit h-fit px-2.5 py-2.5 rounded-md hover:bg-secondaryHover self-end;
+    @apply bg-secondary w-fit h-fit px-2.5 py-2.5 rounded-md hover:bg-secondary-hover self-end;
   }
 
   .quote-details {
     @apply text-sm text-secondary font-bold;
+  }
+
+  .sharing{
+    @apply flex flex-row gap-4;
+  }
+
+  .share-button{
+    @apply bg-secondary w-fit h-fit px-2.5 py-2.5 rounded-md hover:bg-secondary-hover;
   }
 }
