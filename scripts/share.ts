@@ -21,8 +21,10 @@ export function shareToTumblr(
     book: string
 ){
     const tumblrUrl =
-        `https://www.tumblr.com/widgets/share/tool?posttype=quote` +
-        `&caption=${encodeURIComponent(`${title}, ${book}`)}` +
+        `https://www.tumblr.com/widgets/share/tool` +
+        `?canonicalUrl=https://yourwebsite.com` +
+        `&title=${encodeURIComponent(title)}` +
+        `&caption=${encodeURIComponent(book)}` +
         `&content=${encodeURIComponent(text)}`;
 
     window.open(tumblrUrl, "_blank");

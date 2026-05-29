@@ -90,9 +90,20 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
 
             <div className="quote-container">
 
-                <button className="quote-button" onClick={generateQuote}>
-                    Generate Quote!
-                </button>
+                <div className = "sharing">
+                    <button className = "share-button" onClick={handleCopy}>
+                        <img src= "/Icons/copy.svg" alt ="Copy icon" className= "icon"/>
+                             Copy Quote
+                    </button>
+                    <button className = "share-button" onClick={()=> shareToTwitter(fullQuote)}>
+                        <img src= "/Icons/twitter.svg" alt ="X icon" className= "icon"/>
+                        Share to Twitter
+                    </button>
+                    <button className = "share-button" onClick={()=> shareToTumblr(quote.text, quote.title, quote.book)}>
+                        <img src= "/Icons/twitter.svg" alt ="X icon" className= "icon"/>
+                        Share to Tumblr
+                    </button>
+                </div>
 
                 <div className="quote">
                     <blockquote>
@@ -105,12 +116,9 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
 
                 </div>
 
-                <div className = "sharing">
-                    <button className = "share-button" onClick={handleCopy}>Copy Quote</button>
-                    <button className = "share-button" onClick={()=> shareToTwitter(fullQuote)}>Share to Twitter</button>
-                    <button className = "share-button" onClick={()=> shareToTumblr(quote.text, quote.title, quote.book)}>Share to Tumblr</button>
-                </div>
-
+                <button className="quote-button" onClick={generateQuote}>
+                    Generate Quote!
+                </button>
 
             </div>
 
