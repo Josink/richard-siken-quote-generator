@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#poem pdfs
+public/Crush/
+public/War of the Foxes/

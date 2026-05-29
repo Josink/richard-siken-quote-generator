@@ -100,7 +100,7 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
                         Share to Twitter
                     </button>
                     <button className = "share-button" onClick={()=> shareToTumblr(quote.text, quote.title, quote.book)}>
-                        <img src= "/Icons/twitter.svg" alt ="X icon" className= "icon"/>
+                        <img src= "/Icons/tumblr.svg" alt ="X icon" className= "icon"/>
                         Share to Tumblr
                     </button>
                 </div>
