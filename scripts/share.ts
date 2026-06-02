@@ -15,17 +15,11 @@ export function shareToTwitter(fullQuote: string){
     window.open(twitterURL);
 }
 
-export function shareToTumblr(
-    text: string,
-    title: string,
-    book: string
-){
+export function shareToTumblr(fullQuote: string){
     const tumblrUrl =
         `https://www.tumblr.com/widgets/share/tool` +
         `?canonicalUrl=https://yourwebsite.com` +
-        `&title=${encodeURIComponent(title)}` +
-        `&caption=${encodeURIComponent(book)}` +
-        `&content=${encodeURIComponent(text)}`;
+        `&content=${encodeURIComponent(fullQuote)}`;
 
     window.open(tumblrUrl, "_blank");
 }
