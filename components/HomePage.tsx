@@ -66,7 +66,7 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
                         </div>
 
                         <div className = "github">
-                            <a href="https://github.com/Josink">
+                            <a href="https://github.com/Josink/richard-siken-quote-generator">
                             Github
                         </a></div>
                     </div>
