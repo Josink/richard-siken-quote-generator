@@ -51,7 +51,6 @@ export default function HomePage({initialQuote}: HomePageProps): JSX.Element {
 
     return (
         <section className={`${playfair.className} home-page`}>
-
             <div className = "info">
                 <div className = "info-bar">
                     <h1 className= "title">
