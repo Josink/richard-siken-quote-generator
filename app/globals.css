@@ -54,7 +54,7 @@
   }
 
   .quote-container{
-    @apply bg-primary text-background w-screen sm:w-1/3 flex flex-col px-10 py-10 gap-10;
+    @apply bg-primary text-background h-dvh w-screen sm:w-1/3 flex flex-col px-10 py-10 gap-10;
   }
 
   .quote{
