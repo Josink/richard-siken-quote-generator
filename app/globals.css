@@ -26,7 +26,7 @@
   }
 
   .info{
-    @apply w-screen sm:w-2/3 flex flex-col gap-10 px-10 py-10;
+    @apply w-screen sm:w-2/3 h-dvh flex flex-col gap-10 px-10 py-10;
   }
 
   .info-bar{
